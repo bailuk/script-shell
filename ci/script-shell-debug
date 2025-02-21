@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec invoker --single-instance --type=qt5 /usr/lib/libscript-shell.so > /home/ceres/script-shell/debug.log 2>&1

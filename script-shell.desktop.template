@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Categories=Applications;
+Exec=script-shell
+Icon=ios-code
+X-Asteroid-Center-Color=#7997be
+X-Asteroid-Outer-Color=#10386c

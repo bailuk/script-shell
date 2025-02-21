@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(asteroid-helloworld
+set(CPACK_PACKAGE_CONTACT "bailu@bailu.ch")
+
+project(script-shell
 	VERSION 0.0.1
 	DESCRIPTION "Sample application to get started on Asteroid")
 

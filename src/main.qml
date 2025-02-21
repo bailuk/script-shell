@@ -1,33 +1,140 @@
-/*
- * Copyright (C) 2019 Florent Revest <revestflo@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 
 import QtQuick 2.9
 import org.asteroid.controls 1.0
+import org.asteroid.utils 1.0
+
+import QtQuick 2.9
+import org.asteroid.controls 1.0
+import org.asteroid.utils 1.0
 
 Application {
     id: app
 
-    centerColor: "#b04d1c"
-    outerColor: "#421c0a"
+    centerColor: "#7997be"
+    outerColor:  "#10386c"
 
-    Label {
-        id: hello
-        anchors.centerIn: parent
-        horizontalAlignment: Text.AlignHCenter
-        text: "Hello World!"
+    Component {
+        id: scriptDetailComponent
+        Item {
+            id: labelItem
+            Flickable {
+                anchors.fill: parent
+                anchors.topMargin: Dims.l(10)
+                contentHeight: contentColumn.implicitHeight
+    
+                Column {
+                    id: contentColumn
+                    anchors.fill: parent
+
+                    Label {
+                        id: scriptStateLabel
+                        width: parent.width
+                        height: Dims.l(12)
+                        text: controller.selectedScriptState()
+                        verticalAlignment: Text.AlignBottom
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.Wrap
+                    }
+                    Label {
+                        id: scriptNameLabel
+                        width: parent.width
+                        font {
+                            bold: true
+                            pixelSize: Dims.l(9)
+                        }
+                        text: controller.selectedScriptName()
+                        verticalAlignment: Text.AlignBottom
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.NoWrap
+                    }
+
+                    Label {
+                        id: scriptFirstLineLabel
+                        width: parent.width
+                        height: Dims.l(12)
+                        text: controller.selectedScriptLine1()
+                        verticalAlignment: Text.AlignBottom
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.Wrap
+                    }
+
+                    Label {
+                        id: scriptSecondLineLabel
+                        width: parent.width
+                        height: Dims.l(12)
+                        text: controller.selectedScriptLine2()
+                        verticalAlignment: Text.AlignBottom
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.Wrap
+                    }
+                }
+            }
+
+            IconButton {
+                iconName: "ios-checkmark-circle-outline"
+                anchors { 
+                    bottom: parent.bottom
+                    horizontalCenter: parent.horizontalCenter
+                    bottomMargin: Dims.l(10)
+                }
+                onClicked: {
+                    controller.executeSelected()
+                }
+            }
+            function updateLabels() {
+                scriptStateLabel.text = controller.selectedScriptState()
+                scriptFirstLineLabel.text = controller.selectedScriptLine1()
+                scriptSecondLineLabel.text = controller.selectedScriptLine2()
+            }
+            Connections {
+                target: controller
+                function onModelUpdated() {
+                    updateLabels()
+                    console.log("Model has been updated")
+                }
+            }
+        }
+    }
+
+    LayerStack {
+        id: layerStack
+        firstPage: firstPageComponent
+    }
+
+    Component {
+        id: firstPageComponent
+
+        Column {
+            width: parent.width
+            height: parent.height
+            Item { width: parent.width; height: Dims.h(10) }
+            ListView {
+                id: listView
+                width: parent.width
+                height: parent.height - Dims.h(20)
+                model: scriptListModel
+                delegate: Item {
+                    width: listView.width
+                    height: Dims.h(17)                    
+                    
+                    HighlightBar {
+                        anchors.fill: parent
+                        onClicked: {
+                            controller.selectScript(index);
+                            layerStack.push(scriptDetailComponent)
+                        }
+                    }
+                    Label {
+                        text: name
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pixelSize: Dims.l(9)
+                        anchors.centerIn: parent                         
+                    }
+                }
+            }
+            Item { width: parent.width; height: Dims.h(10) }
+        }
     }
 }

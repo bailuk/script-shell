@@ -1,17 +1,61 @@
-# AsteroidOS Hello World App
-A simple hello world app for [AsteroidOS](http://asteroidos.org/)
+# script-shell
 
-See https://wiki.asteroidos.org/index.php/Creating_an_Asteroid_app for instruction on how to build and run it.
+App for [AsteroidOS](https://asteroidos.org/) that provides an interface for running scripts on your watch.
 
-If you have used the Hello World App as a template and wish to use it as the basis for your own AsteroidOS application here are the steps:
+**script-shell** lists scripts (executable files) in `/home/ceres/script-shell`. 
+It then lets you run those scripts and displays some stdout messages and the state on the watch display.
 
- 1. Decide on a name for your project, (we use `myproject-name` as an example here)
- 2. Change the project name in `CMakeLists.txt` from `asteroid-helloworld` to your name (e.g. `myproject-name`)
- 3. Rename the `i18n/asteroid-helloworld.desktop.h` file to user your project name (e.g. `i18n/myproject-name.desktop.h`)
- 4. Rename the `asteroid-helloworld.desktop.template` file to use your project name (e.g. `myproject-name.desktop.template`)
- 5. Edit the newly renamed `destkop.template` file from the previous step and change the `Exec=` line to your project name
- 6. Optionally, but highly recommended, change the `Icon`, `X-Asteroid-Center-Color` and `X-Asteroid-Outer-Color` values in that same file
- 7. Alter the functionality to suit
+![script list](doc/screenshot-list.jpg)
+![run script](doc/screenshot-script.jpg)
 
+## Build and install
 
-Note that for steps 3 and 4, use `git mv` to rename the files so that your repository will reflect these changes.
+First install the SDK: https://wiki.asteroidos.org/index.php/Installing_the_SDK
+
+```bash
+# build package
+export CMAKE_PROGRAM_PATH=/usr/local/oecore-x86_64/sysroots/armv7vehf-neon-oe-linux-gnueabi/usr/bin/
+source /usr/local/oecore-x86_64/environment-setup-armv7vehf-neon-oe-linux-gnueabi
+cmake -B build
+cmake --build build --target package
+
+# install package
+scp build/*.ipk root@192.168.2.15:.
+ssh root@192.168.2.15 "opkg install script-shell*.ipk"
+```
+
+More about building AsteroidOS apps: https://wiki.asteroidos.org/index.php/Creating_an_Asteroid_app
+
+## Conventions for scripts
+
+**script-shell** scans and displays all **executable** files installed in `/home/ceres/script-shell`.
+
+_Files must be executable_ (`chmod 700 script.sh`). Else they will be ingored.
+
+### File name
+
+1. Files will be sorted alphanumericly.
+2. Leading digits, followed by a `_` will not be displayed.
+3. File-extensions (everything after the `.`) will be ommited too.
+4. `-` and `_` signs will be replaced by a space (` `).
+
+Example filename: `01_Hello-World.sh`
+
+### Example script
+
+```bash
+#!/bin/sh
+
+# Lines on stdout that beginn with a `->` are getting displayed on the watch.
+# All other text output will be ignored.
+echo "-> Hello World"
+echo "ignored output"
+
+# A return value of 0 indicatates success. 
+# All other return values are interpreted as error.
+exit 0 
+```
+
+### More examples
+
+See [doc/example-scripts](doc/example-scripts) for some examples.

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2025 - Lukas Bai <bailu@bailu.ch>
  * Copyright (C) 2019 - Florent Revest <revestflo@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -15,9 +16,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <asteroidapp.h>
-
-int main(int argc, char *argv[])
-{
-    return AsteroidApp::main(argc, argv);
-}
+ #include <QGuiApplication>
+ #include <QQuickView>
+ #include <QScreen>
+ #include <QtQml>
+ 
+ #include <asteroidapp.h>
+ 
+ #include "ScriptListModel.h"
+ #include "Controller.h"
+ 
+ int main(int argc, char* argv[])
+ {
+     ScriptListModel model;
+     Controller controller(&model);
+ 
+     QScopedPointer<QGuiApplication> app(AsteroidApp::application(argc, argv));
+     QScopedPointer<QQuickView> view(AsteroidApp::createView());
+     view->rootContext()->setContextProperty("scriptListModel",  &model);
+     view->rootContext()->setContextProperty("controller", &controller);
+     view->setSource(QUrl("qrc:/main.qml"));
+     view->resize(app->primaryScreen()->size());
+     view->show();
+ 
+     return app->exec();
+ }
+ 
