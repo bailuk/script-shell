@@ -1,9 +1,9 @@
 #!/bin/sh
 
 
-result=$(/sbin/mcetool | grep 'Display state')
+result=$(/sbin/mcetool | grep 'Blank inhibit')
 
-if echo $result | grep on
+if echo $result | grep stay-on
 then
     echo "-> Screen OFF"
     /sbin/mcetool -D off | exit 1
