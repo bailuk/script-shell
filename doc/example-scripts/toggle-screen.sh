@@ -11,5 +11,4 @@ then
 fi
 
 echo "-> Screen ON"
-/sbin/mcetool -D on | exit 1
-exit 0
+/sbin/mcetool -D on
