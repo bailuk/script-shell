@@ -10,63 +10,56 @@ import org.asteroid.utils 1.0
 Application {
     id: app
 
-    centerColor: "#7997be"
-    outerColor:  "#10386c"
+    centerColor: "#0f6602"
+    outerColor:  "#000000"
 
     Component {
         id: scriptDetailComponent
         Item {
-            id: labelItem
-            Flickable {
+            Column {
+                width: parent.width
+                height: parent.height
                 anchors.fill: parent
-                anchors.topMargin: Dims.l(10)
-                contentHeight: contentColumn.implicitHeight
-    
-                Column {
-                    id: contentColumn
-                    anchors.fill: parent
+                Item { width: parent.width; height: Dims.h(10) }
+                Label {
+                    id: scriptStateLabel
+                    width: parent.width
+                    height: Dims.l(12)
+                    text: controller.selectedScriptState()
+                    verticalAlignment: Text.AlignBottom
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
+                }
+                Label {
+                    width: parent.width
+                    font {
+                        bold: true
+                        pixelSize: Dims.l(9)
+                    }
+                    text: controller.selectedScriptName()
+                    verticalAlignment: Text.AlignBottom
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.NoWrap
+                }
 
-                    Label {
-                        id: scriptStateLabel
-                        width: parent.width
-                        height: Dims.l(12)
-                        text: controller.selectedScriptState()
-                        verticalAlignment: Text.AlignBottom
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.Wrap
-                    }
-                    Label {
-                        id: scriptNameLabel
-                        width: parent.width
-                        font {
-                            bold: true
-                            pixelSize: Dims.l(9)
-                        }
-                        text: controller.selectedScriptName()
-                        verticalAlignment: Text.AlignBottom
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.NoWrap
-                    }
+                Label {
+                    id: scriptLine1Label
+                    width: parent.width
+                    height: Dims.l(12)
+                    text: controller.selectedScriptLine1()
+                    verticalAlignment: Text.AlignBottom
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
+                }
 
-                    Label {
-                        id: scriptFirstLineLabel
-                        width: parent.width
-                        height: Dims.l(12)
-                        text: controller.selectedScriptLine1()
-                        verticalAlignment: Text.AlignBottom
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.Wrap
-                    }
-
-                    Label {
-                        id: scriptSecondLineLabel
-                        width: parent.width
-                        height: Dims.l(12)
-                        text: controller.selectedScriptLine2()
-                        verticalAlignment: Text.AlignBottom
-                        horizontalAlignment: Text.AlignHCenter
-                        wrapMode: Text.Wrap
-                    }
+                Label {
+                    id: scriptLine2Label
+                    width: parent.width
+                    height: Dims.l(12)
+                    text: controller.selectedScriptLine2()
+                    verticalAlignment: Text.AlignBottom
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
                 }
             }
 
@@ -81,28 +74,20 @@ Application {
                     controller.executeSelected()
                 }
             }
-            function updateLabels() {
-                scriptStateLabel.text = controller.selectedScriptState()
-                scriptFirstLineLabel.text = controller.selectedScriptLine1()
-                scriptSecondLineLabel.text = controller.selectedScriptLine2()
-            }
+
             Connections {
                 target: controller
                 function onModelUpdated() {
-                    updateLabels()
-                    console.log("Model has been updated")
+                    scriptStateLabel.text = controller.selectedScriptState()
+                    scriptLine1Label.text = controller.selectedScriptLine1()
+                    scriptLine2Label.text = controller.selectedScriptLine2()
                 }
             }
         }
     }
 
-    LayerStack {
-        id: layerStack
-        firstPage: firstPageComponent
-    }
-
     Component {
-        id: firstPageComponent
+        id: scriptListComponent
 
         Column {
             width: parent.width
@@ -137,4 +122,10 @@ Application {
             Item { width: parent.width; height: Dims.h(10) }
         }
     }
+
+    LayerStack {
+        id: layerStack
+        firstPage: scriptListComponent
+    }
+
 }
