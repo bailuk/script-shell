@@ -8,29 +8,31 @@
 
 
 const std::regex pattern(R"(^->(.*)$)");
+const QStringList arguments = {};
 
 ScriptExecutor::ScriptExecutor() {
     process = new QProcess(this);
+    process->setWorkingDirectory("/home/ceres/script-shell");
+
     nextLine = "";
 
-    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(onProcessFinished(int, QProcess::ExitStatus)));
-    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(onReadyRead()));
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(onProcessFinished(int, QProcess::ExitStatus)));
+    connect(process, SIGNAL(readyReadStandardOutput()), SLOT(onReadyRead()));
 }
 
 void ScriptExecutor::execute(const QString &scriptPath) {
     if (executing == false) {
         executing = true;
-        emit stateChanged("...");
 
+        emit stateChanged("...");
         nextLine = "";
-        const QStringList arguments = {};
         process->start(scriptPath, arguments);
     }
 }
 
 void ScriptExecutor::onReadyRead() {
-    QByteArray output = process->readAllStandardOutput();
-    handleLines(output.toStdString());
+    QByteArray stdout = process->readAllStandardOutput();
+    handleLines(stdout.toStdString());
 }
 
 void ScriptExecutor::handleLines(const std::string& input) {
