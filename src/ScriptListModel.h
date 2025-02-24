@@ -21,6 +21,11 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     Script* getScript(int i);
+
+    Q_INVOKABLE bool isEmpty() const {
+        return scripts.isEmpty();
+    }
+
 protected:
     QHash<int, QByteArray> roleNames() const override;
 

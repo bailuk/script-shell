@@ -1,8 +1,3 @@
-
-import QtQuick 2.9
-import org.asteroid.controls 1.0
-import org.asteroid.utils 1.0
-
 import QtQuick 2.9
 import org.asteroid.controls 1.0
 import org.asteroid.utils 1.0
@@ -123,9 +118,22 @@ Application {
         }
     }
 
-    LayerStack {
-        id: layerStack
-        firstPage: scriptListComponent
+    Component {
+        id: scriptEmptyComponent
+        Item {
+            Label {
+                width: parent.width
+                height: parent.height
+                text: "No scripts found in '/home/ceres/script-shell'"
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+            }
+        }
     }
 
+    LayerStack {
+        id: layerStack
+        firstPage: scriptListModel.isEmpty() ? scriptEmptyComponent : scriptListComponent
+    }
 }

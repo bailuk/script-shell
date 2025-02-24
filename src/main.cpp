@@ -16,29 +16,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
- #include <QGuiApplication>
- #include <QQuickView>
- #include <QScreen>
- #include <QtQml>
- 
- #include <asteroidapp.h>
- 
- #include "ScriptListModel.h"
- #include "Controller.h"
- 
- int main(int argc, char* argv[])
- {
-     ScriptListModel model;
-     Controller controller(&model);
- 
-     QScopedPointer<QGuiApplication> app(AsteroidApp::application(argc, argv));
-     QScopedPointer<QQuickView> view(AsteroidApp::createView());
-     view->rootContext()->setContextProperty("scriptListModel",  &model);
-     view->rootContext()->setContextProperty("controller", &controller);
-     view->setSource(QUrl("qrc:/main.qml"));
-     view->resize(app->primaryScreen()->size());
-     view->show();
- 
-     return app->exec();
- }
- 
+#include <QGuiApplication>
+#include <QQuickView>
+#include <QScreen>
+#include <QtQml>
+
+#include <asteroidapp.h>
+
+#include "ScriptListModel.h"
+#include "Controller.h"
+
+int main(int argc, char* argv[])
+{
+    ScriptListModel model;
+    Controller controller(&model);
+
+    QScopedPointer<QGuiApplication> app(AsteroidApp::application(argc, argv));
+    QScopedPointer<QQuickView> view(AsteroidApp::createView());
+
+    view->rootContext()->setContextProperty("scriptListModel",  &model);
+    view->rootContext()->setContextProperty("controller", &controller);
+    view->setSource(QUrl("qrc:/main.qml"));
+    view->resize(app->primaryScreen()->size());
+    view->show();
+
+    return app->exec();
+}
