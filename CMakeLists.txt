@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.20)
 set(CPACK_PACKAGE_CONTACT "bailu@bailu.ch")
 
 project(script-shell
-	VERSION 0.0.1
-	DESCRIPTION "Sample application to get started on Asteroid")
+	VERSION 0.0.2
+	DESCRIPTION "GUI for running scripts")
 
 find_package(ECM REQUIRED NO_MODULE)
 find_package(AsteroidApp REQUIRED)

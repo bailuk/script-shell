@@ -16,7 +16,7 @@ First install the SDK: https://wiki.asteroidos.org/index.php/Installing_the_SDK
 # build package
 export CMAKE_PROGRAM_PATH=/usr/local/oecore-x86_64/sysroots/armv7vehf-neon-oe-linux-gnueabi/usr/bin/
 source /usr/local/oecore-x86_64/environment-setup-armv7vehf-neon-oe-linux-gnueabi
-cmake -B build
+cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=/usr
 cmake --build build --target package
 
 # install package
